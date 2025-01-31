@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Despliegue con Docker</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #007bff;
+            text-align: center;
+        }
+        pre {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+        ul {
+            background: #f1f3f5;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Guía de Despliegue con Docker</h1>
+        
+        <h2>🌐 Configuración de Red</h2>
+        <p>Para asegurar la comunicación entre los contenedores de forma segura, se usa la red <code>app_network</code>.</p>
+
+        <h2>📦 Base de Datos - MySQL</h2>
+        <pre>docker run --name mysql-login --network app_network -e MYSQL_ROOT_PASSWORD=rootpassword -e MYSQL_DATABASE=login -e MYSQL_USER=jonnathan -e MYSQL_PASSWORD=1234 -p 3306:3306 -d mysql:latest</pre>
+
+        <h2>🔧 Backend - Java Spring Boot</h2>
+        <p><strong>Creación del JAR:</strong></p>
+        <pre>mvn clean package -DskipTests</pre>
+        <p><strong>Dockerfile:</strong></p>
+        <pre>
+FROM openjdk:17-jdk-alpine
+COPY target/ProyectoGraducacionTurismoTec-0.0.1-SNAPSHOT.jar ProyectoGraducacionTurismoTec-0.0.1-SNAPSHOT.jar
+ENTRYPOINT ["java","-jar","/ProyectoGraducacionTurismoTec-0.0.1-SNAPSHOT.jar"]
+        </pre>
+        <p><strong>Construcción y ejecución:</strong></p>
+        <pre>
+docker build -t jonnathan23/turismoteccontainer:0.1 .
+docker run -d -p 8080:8080 --name turismotec-back --network app_network jonnathan23/turismoteccontainer:0.1
+        </pre>
+
+        <h2>🎨 Frontend - Angular</h2>
+        <p><strong>Construcción de la aplicación:</strong></p>
+        <pre>ng build --configuration=production --output-hashing=all --no-prerender</pre>
+        <p><strong>Creación del contenedor:</strong></p>
+        <pre>
+docker build -t jonnathan23/turismotecfront:0.1 .
+docker run -d -p 80:80 --name turismotec-front --network app_network jonnathan23/turismotecfront:0.1
+        </pre>
+
+        <h3>Dockerfile para el Frontend:</h3>
+        <pre>
+FROM nginx:alpine
+
+# Copiar los archivos construidos a la carpeta de Nginx
+COPY dist/turismo-cuenca/browser /usr/share/nginx/html
+
+# Exponer el puerto 80
+EXPOSE 80
+
+# Comando para iniciar Nginx
+CMD ["nginx", "-g", "daemon off;"]
+        </pre>
+
+        <h2>❗ Correcciones y Problemas</h2>
+        <ul>
+            <li>Si hay errores en la construcción de Angular, ejecutar <code>ng build --verbose</code>.</li>
+            <li>Si el CORS da problemas, asegurarse de habilitarlo en el backend permitiendo <code>*</code> o definiendo las IPs correctas.</li>
+        </ul>
+    </div>
+</body>
+</html>
