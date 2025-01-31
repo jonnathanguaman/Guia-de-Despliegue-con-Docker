@@ -67,14 +67,6 @@ docker run -d -p 8080:8080 --name turismotec-back --network app_network jonnatha
         </pre>
 
         <h2>🎨 Frontend - Angular</h2>
-        <p><strong>Construcción de la aplicación:</strong></p>
-        <pre>ng build --configuration=production --output-hashing=all --no-prerender</pre>
-        <p><strong>Creación del contenedor:</strong></p>
-        <pre>
-docker build -t jonnathan23/turismotecfront:0.1 .
-docker run -d -p 80:80 --name turismotec-front --network app_network jonnathan23/turismotecfront:0.1
-        </pre>
-
         <h3>Dockerfile para el Frontend:</h3>
         <pre>
 FROM nginx:alpine
@@ -87,6 +79,14 @@ EXPOSE 80
 
 # Comando para iniciar Nginx
 CMD ["nginx", "-g", "daemon off;"]
+        </pre>
+        
+        <p><strong>Construcción de la aplicación:</strong></p>
+        <pre>ng build --configuration=production --output-hashing=all --no-prerender</pre>
+        <p><strong>Creación del contenedor:</strong></p>
+        <pre>
+docker build -t jonnathan23/turismotecfront:0.1 .
+docker run -d -p 80:80 --name turismotec-front --network app_network jonnathan23/turismotecfront:0.1
         </pre>
 
         <h2>❗ Correcciones y Problemas</h2>
