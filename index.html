@@ -67,6 +67,9 @@ docker run -d -p 8080:8080 --name turismotec-back --network app_network jonnatha
         </pre>
 
         <h2>🎨 Frontend - Angular</h2>
+
+        <p>Cambiamos la url de los enviroment por la ip de la maquina anfitriona o por la ip publica para produccio</p>
+
         <h3>Dockerfile para el Frontend:</h3>
         <pre>
 FROM nginx:alpine
@@ -80,7 +83,7 @@ EXPOSE 80
 # Comando para iniciar Nginx
 CMD ["nginx", "-g", "daemon off;"]
         </pre>
-        
+
         <p><strong>Construcción de la aplicación:</strong></p>
         <pre>ng build --configuration=production --output-hashing=all --no-prerender</pre>
         <p><strong>Creación del contenedor:</strong></p>
